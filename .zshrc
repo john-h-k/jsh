@@ -120,7 +120,6 @@ plugins=(
 	git-delta
 	goto
 	ip
-	jane-street-puzzle
 	magic-enter
 	ngrok
 	ntfy
