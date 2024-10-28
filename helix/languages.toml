@@ -1,1 +1,93 @@
-/Users/johnk/.config/helix/languages.toml
+[language-server.svls]
+command = "svls"
+
+[[language]]
+name = "verilog"
+language-servers = ["svls"]
+
+[[language]]
+name = "rust"
+
+# [language-server.arduino-lsp]
+# command = "arduino-language-server" 
+# args = ["-cli", "arduino-cli", "-cli-config", "/Users/johnk/Library/Arduino15/arduino-cli.yaml", "-clangd", "clangd"]
+
+# [[grammar]]
+# name = "cpp"
+# source = { git = "https://github.com/tree-sitter/tree-sitter-cpp", rev = "master" }
+
+# [[grammar]]
+# name = "arduino"
+# source = { git = "https://github.com/tree-sitter-grammars/tree-sitter-arduino", rev = "master" }
+
+# [[language]]
+# name = "arduino"
+# grammar = "cpp"
+# scope = "source.arduino"
+# injection-regex = "arduino"
+# file-types = ["ino"]
+# roots = ["*.ino", "sketch.yaml"]
+# language-servers = [ "arduino-lsp" ]
+
+[[language]]
+name = "arduino"
+scope = "source.arduino"
+grammar = "cpp"
+injection-regex = "arduino"
+file-types = ["ino"]
+comment-token = "//"
+roots = ["sketch.yaml"]
+language-servers = ["arduino-language-server"]
+indent = { tab-width = 4, unit = "    " }
+auto-format = true
+
+[language.formatter]
+command = "clang-format"
+
+[language-server.arduino-language-server]
+command = "arduino-language-server"
+
+
+# [[grammar]]
+# name = "cpp"
+# source = { git = "https://github.com/tree-sitter/tree-sitter-cpp", rev = "a90f170f92d5d70e7c2d4183c146e61ba5f3a457" }
+
+# [[grammar]]
+# name = "arduino"
+# source = { git = "https://github.com/ObserverOfTime/tree-sitter-arduino", rev = "db929fc6822b9b9e1211678d508f187894ce0345" }
+
+[[language]]
+name = "lalrpop"
+roots = [ "Cargo.toml" ]
+scope = "source.lalrpop"
+grammar = "rust"
+file-types = [ "lalrpop" ]
+
+[language-server.rust-analyzer.config.check]
+command = "clippy"
+
+[[language]]
+name = "c-sharp"
+language-servers = [ "omnisharp" ]
+
+[language-server.omnisharp]
+command = "dotnet"
+args = [ "/Users/johnk/Desktop/omnisharp-osx-arm64-net6.0/Omnisharp.dll", "--languageserver" ]
+
+[[language]]
+name = "python"
+language-servers = ["pylsp"]
+roots = [".git"]
+auto-format = true
+
+[language-server.pylsp.config.pylsp.plugins]
+flake8 = {enabled = true, ignore = ["E501"]}
+autopep8 = {enabled = false}
+mccabe = {enabled = false}
+pycodestyle = {enabled = false}
+pyflakes = {enabled = false}
+pylint = {enabled = false}
+yapf = {enabled = false}
+ruff = {enabled = false}
+pylsp-mypy = {enabled = true}
+
