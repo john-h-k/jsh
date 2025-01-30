@@ -12,8 +12,9 @@ color-modes = true
 auto-pairs = true
 rulers = [120]
 bufferline = "multiple"
-#idle-timeout = 50
-#shell = ["zsh", "-ic"]
+continue-comments = false
+# idle-timeout = 50
+# shell = ["zsh", "-ic"]
 
 [editor.cursor-shape]
 insert = "bar"

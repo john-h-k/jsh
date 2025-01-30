@@ -105,7 +105,9 @@ _plugin_write_plugins() {
     cat ~/.zshrc \
         | tr '\n' '\0' \
         | gsed -E "s/# Custom[^ ][^)]+/# Custom\x0\t${formatted_plugins:0:-2}/" \
-        | tr '\0' '\n' > ~/.zshrc
+        | tr '\0' '\n' > ~/.zshrc.new
+
+    cp ~/.zshrc.new ~/.zshrc.bak
 }
 
 _plugin_exists() {

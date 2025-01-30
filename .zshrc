@@ -1,6 +1,12 @@
 # # UNCOMMENT TO PROFILE
 # zmodload zsh/zprof
 
+# Done BEFORE instant prompt
+
+local space=$(df -g | head -2 | awk 'NR==2 {print $4}')
+if (( space < 5 )); then
+	print "\033[1;33mWARNING: low space (${space}Gi) \033[0m"
+fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -30,9 +36,11 @@ setopt rcquotes
 
 # Environment managers
 eval "$(opam env)" # opam (OCaml)
-eval "$(pyenv init -)" # pyenv (Python)
 eval "$(rbenv init - zsh)" # rbenv (Ruby)
 eval "$(fnm env --use-on-cd)" # fnm (Node)
+
+# sometimes need to disable - doesn't work with uv
+eval "$(pyenv init -)" # pyenv (Python)
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/johnk/.oh-my-zsh"
@@ -119,6 +127,7 @@ plugins=(
 	clean-branches
 	git-delta
 	goto
+	ek
 	ip
 	magic-enter
 	ngrok
@@ -130,6 +139,8 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+
+alias gprp="gpr && gp"
 
 # User configuration
 
@@ -247,6 +258,8 @@ docker-ui() {
 	/Applications/Docker.app/Contents/MacOS/Docker
 	return 0
 }
+
+
 
 star-count() {
 	repos=$(gh repo list --limit 2000 --json isFork,nameWithOwner --jq '.[] | select(.isFork|not) | .nameWithOwner')
@@ -383,11 +396,23 @@ lvim_km() {
 
 findal() {
 	# search aliases
-	alias | grep "$1"
+	alias | grep --color=always "$*"
 }
 
 disk() {
 	df -h /
+}
+
+strip-trailing-ws() {
+	fd . -t f -x gsed --in-place 's/[[:space:]]\+$//'
+}
+
+i2s() {
+		echo "$1" | python3 -c "import struct; print(struct.unpack('<f', struct.pack('<I', int(input())))[0])"
+}
+
+s2i() {
+  echo "$1" | python3 -c "import struct; print(struct.unpack('<I', struct.pack('<f', float(input())))[0])"
 }
 
 export PATH="/Users/johnk/.yarn/bin:$PATH"
@@ -429,3 +454,12 @@ export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
 export HELIX_RUNTIME="/Users/johnk/.config/helix/runtime"
 export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
 
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('/Users/johnk/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<

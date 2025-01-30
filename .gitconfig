@@ -1,0 +1,75 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pager]
+	branch = false
+[core]
+	pager = less -FRX
+	editor = hx
+	excludesFile = ~/.gitignore
+[diff]
+	tool = vscode
+[diff "pdf"]
+	textconv = pdf-diff
+[difftool "vscode"]
+	cmd = code --wait --new-window --diff $LOCAL $REMOTE
+[merge]
+	tool = vscode
+	conflictStyle = zdiff3
+[mergetool "vscode"]
+	cmd = code --wait --new-window $MERGED
+[mergetool "pdf-diff"]
+	cmd = pdf-diff "$BASE" "$LOCAL" "$REMOTE"
+[oh-my-zsh]
+	hide-status = 1
+	hide-dirty = 1
+[pull]
+	ff = only
+[alias]
+	cherry-pick-theirs = cherry-pick --strategy-option=theirs # Cherry-pick a commit ignoring local changes
+	cpt = cherry-pick-theirs
+
+	lol = log --graph --decorate --oneline --abbrev-commit # Pretty log
+	lola = log --graph --decorate --oneline --abbrev-commit --all # Pretty log all
+
+	log-recent = log --oneline -n 10 # Show recent commits in a clean format
+	lr = log-recent
+
+	branch-reset = !git fetch && git reset origin/$(git rev-parse --abbrev-ref HEAD) --hard #
+
+	hidden = !git ls-files -v | grep \"^S \"
+
+	empty = !print '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
+
+	tag-clear = !git tag --delete $1 && git push --delete origin $1 && :
+	pushf = push --force-with-lease
+
+	rollback = reset --soft HEAD^ # Inspired by Mercurial's rollback
+
+	branch-clean = !git branch | xargs -I{} git branch -d {}
+
+	interactive-rebase = !git rebase --interactive --autosquash # Shortcut for interactive rebasing with autosquash enabled
+	irb = interactive-rebase
+
+	default-branch = !basename $(git symbolic-ref --short refs/remotes/origin/HEAD) # Get the default branch of the current repo
+
+	sync-main = !git fetch "${2:-origin}" "${1:-$(git default-branch)}:${1:-$(git default-branch)}" # Sync either the default-branch or the specified branch with the remote
+	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+	count-lines-all = "! git log --all --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+[rerere]
+	enabled = 1
+[push]
+	autoSetupRemote = true
+[branchless "hint"]
+	smartlogFixAbandoned = false
+[interactive]
+	singlekey = true
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+[http]
+	postBuffer = 157286400
